@@ -25,6 +25,12 @@ export const mastra = new Mastra({
   }),
   server: {
     host: '0.0.0.0',
+    cors: {
+      origin: ["*"], 
+      allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowHeaders: ["Content-Type", "Authorization", "x-mastra-client-type"],
+      credentials: true,
+    },
     apiRoutes: [
       chatRoute({
         path: '/chat/:agentId',
@@ -32,7 +38,7 @@ export const mastra = new Mastra({
           maxSteps: 10, // 允许模型进行更多次的工具调用循环
           providerOptions: {
             deepseek: {
-              max_tokens: 409600, // 尝试调大单次响应的 token 限制
+              max_tokens: 8000, // 尝试调大单次响应的 token 限制
               stream: true
             },
           },
