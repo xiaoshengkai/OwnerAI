@@ -29,7 +29,7 @@ export const mastra = new Mastra({
       origin: ["*"], 
       allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowHeaders: ["Content-Type", "Authorization", "x-mastra-client-type"],
-      credentials: true,
+      // credentials: true,
     },
     apiRoutes: [
       chatRoute({
