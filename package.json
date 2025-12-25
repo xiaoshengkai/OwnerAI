@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "sudo vite",
-    "build": "tsc -b && vite build",
+    "build:static": "tsc --noEmit && vite build",
+    "build:server": "tsc --noEmit && mastra build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "sudo npx mastra dev"
