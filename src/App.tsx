@@ -15,7 +15,7 @@ export default function App() {
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
-      api: 'http://localhost:4111/chat/owner-agent',
+      api: 'http://121.41.175.102:4111/chat/owner-agent',
     }),
   });
 

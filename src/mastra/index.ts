@@ -24,6 +24,7 @@ export const mastra = new Mastra({
     default: { enabled: true },
   }),
   server: {
+    host: '0.0.0.0',
     apiRoutes: [
       chatRoute({
         path: '/chat/:agentId',
