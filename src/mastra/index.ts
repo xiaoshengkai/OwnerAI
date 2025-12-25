@@ -24,13 +24,13 @@ export const mastra = new Mastra({
     default: { enabled: true },
   }),
   server: {
-    // host: '0.0.0.0',
-    cors: {
-      origin: ["*"], 
-      allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowHeaders: ["Content-Type", "Authorization", "x-mastra-client-type"],
-      // credentials: true,
-    },
+    host: '0.0.0.0',
+    // cors: {
+    //   origin: ["*"], 
+    //   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    //   allowHeaders: ["Content-Type", "Authorization", "x-mastra-client-type"],
+    //   // credentials: true,
+    // },
     apiRoutes: [
       chatRoute({
         path: '/chat/:agentId',
