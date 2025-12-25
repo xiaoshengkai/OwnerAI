@@ -50,7 +50,7 @@ export const ownerAgent = new Agent({
     generateHtmlTool,
     ...(await mcpMapAmapClient.listTools()),
     ...(await mac12306Client.listTools()),
-    ...(await mcpTicketClient.listTools()),
+    // ...(await mcpTicketClient.listTools()),
   },
   memory: new Memory(),
 });
