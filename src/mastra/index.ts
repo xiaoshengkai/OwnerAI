@@ -1,19 +1,19 @@
-
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
 import { LibSQLStore } from '@mastra/libsql';
 import { Observability } from '@mastra/observability';
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
-
+import { ownerAgent } from './agents/owner-agent';
+import { chatRoute } from '@mastra/ai-sdk';
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { weatherAgent },
+  agents: { weatherAgent, ownerAgent },
   storage: new LibSQLStore({
-    id: "mastra-storage",
+    id: 'mastra-storage',
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
-    url: ":memory:",
+    url: ':memory:',
   }),
   logger: new PinoLogger({
     name: 'Mastra',
@@ -23,4 +23,20 @@ export const mastra = new Mastra({
     // Enables DefaultExporter and CloudExporter for tracing
     default: { enabled: true },
   }),
+  server: {
+    apiRoutes: [
+      chatRoute({
+        path: '/chat/:agentId',
+        defaultOptions: {
+          maxSteps: 10, // 允许模型进行更多次的工具调用循环
+          providerOptions: {
+            deepseek: {
+              max_tokens: 409600, // 尝试调大单次响应的 token 限制
+              stream: true
+            },
+          },
+        },
+      }),
+    ],
+  },
 });
