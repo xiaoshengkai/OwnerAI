@@ -15,8 +15,8 @@ export default function App() {
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
-      // api: 'http://ai-server.xiaoshengkai.com/chat/owner-agent',
-      api: 'http://121.41.175.102:4111/chat/owner-agent'
+      api: 'http://ai.xiaoshengkai.com/chat/owner-agent',
+      // api: 'http://121.41.175.102:4111/chat/owner-agent'
     }),
   });
 
