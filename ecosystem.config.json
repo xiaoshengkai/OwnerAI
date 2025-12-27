@@ -1,7 +1,7 @@
 {
   "apps": [{
     "name": "OwnerAI",
-    "script": "./output/index.mjs",
+    "script": "./.mastra/output/index.mjs",
     "cwd": "/root/project/OwnerAI/",
     "node_args": "--env-file=../.env",
     "instances": 1,
