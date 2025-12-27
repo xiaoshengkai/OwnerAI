@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "sudo npx mastra dev",
-    "production:server": "pm2 start ecosystem.config.js --env production"
+    "production:server": "pm2 start ecosystem.config.json --env production"
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.3",
