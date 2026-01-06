@@ -3,7 +3,7 @@ import { Memory } from '@mastra/memory';
 import { generateHtmlTool } from '../tools/generate-html-tool';
 import { mcpMapAmapClient } from '../mcp/mcpMapAmapClient';
 import { mac12306Client } from '../mcp/mcp12306Client';
-import { mcpTicketClient } from '../mcp/mcpTicketClient';
+import { macHotelClient } from '../mcp/mcpHotelClient';
 
 export const ownerAgent = new Agent({
   id: 'owner-agent',
@@ -20,10 +20,12 @@ export const ownerAgent = new Agent({
       - 开始规划绍兴到用户提到的地点路线规划
       - 制作网页地图自定义绘制旅游路线和位置。
       - 网页使用炫酷，优美，简约（随机）页面风格
-        - 景区展示用3D动画效果展示，点击哪个景区地图可以定位到
+        - 景区展示用3D动画效果展示，点击哪个景区地图可以定位到，并且考虑景点如何玩的攻略参谋（如何玩才能玩的好）
         - 其中车票/机票信息需要重要展示，如果可以的话把回来的票也考虑上
+        - 同一天行程景区之间我想打车前往
+        - 需要住宿信息，根据用户的需要的酒店信息，如果用户没有特别要求，那么就给出性价比较高的酒店信息;查不到就不展示
+        - 增加美食推荐板块，不少于8种推荐，尽量推荐的多一些
       - 行程规划结果在高德地图app展示，并集成到h5页面中。
-      - 同一天行程景区之间我想打车前往
       - 随机生成文件名（建议使用时间戳），最后输出展示html文件预览地址
       - 查看预览的文案更醒目，让用户知道可以点击
     `,
@@ -41,7 +43,7 @@ export const ownerAgent = new Agent({
       role: 'system',
       content: `
       关于一些key的说明：
-      - 高德地图API的js SDK key为b49286ec4d5577233f3eedf3eaf59d3f
+      - 高德地图API的js SDK key为${process.env.AMAP_API_KEY}
     `,
     },
   ],
@@ -50,7 +52,7 @@ export const ownerAgent = new Agent({
     generateHtmlTool,
     ...(await mcpMapAmapClient.listTools()),
     ...(await mac12306Client.listTools()),
-    // ...(await mcpTicketClient.listTools()),
+    ...(await macHotelClient.listTools()),
   },
   memory: new Memory(),
 });

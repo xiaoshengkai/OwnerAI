@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
 import { LibSQLStore } from '@mastra/libsql';
@@ -5,11 +6,16 @@ import { Observability } from '@mastra/observability';
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
 import { ownerAgent } from './agents/owner-agent';
+import { browserAgent } from './agents/browser-agent';
 import { chatRoute } from '@mastra/ai-sdk';
+import { registerApiRoute } from '@mastra/core/server';
+import { codeAnalysisAgent } from './agents/code-analysis-agent';
+
+const agents = { ownerAgent, browserAgent, codeAnalysisAgent };
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { weatherAgent, ownerAgent },
+  agents,
   storage: new LibSQLStore({
     id: 'mastra-storage',
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
@@ -24,9 +30,9 @@ export const mastra = new Mastra({
     default: { enabled: true },
   }),
   server: {
-    host: '0.0.0.0',
+    // host: '0.0.0.0',
     // cors: {
-    //   origin: ["*"], 
+    //   origin: ["*"],
     //   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     //   allowHeaders: ["Content-Type", "Authorization", "x-mastra-client-type"],
     //   // credentials: true,
@@ -39,9 +45,23 @@ export const mastra = new Mastra({
           providerOptions: {
             deepseek: {
               max_tokens: 8000, // 尝试调大单次响应的 token 限制
-              stream: true
+              stream: true,
             },
           },
+        },
+      }),
+      registerApiRoute('/all-agent-pathName', {
+        method: 'GET',
+        handler: async (c) => {
+          const obj = { ...agents } as any;
+          const json = Object.keys(obj).map((agent) => {
+            return {
+              name: obj[agent].name,
+              id: obj[agent].id,
+            };
+          });
+
+          return c.json(json);
         },
       }),
     ],

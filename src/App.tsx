@@ -1,85 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/refs */
 import * as React from 'react';
-import { DefaultChatTransport, type ToolUIPart } from 'ai';
-import { useChat } from '@ai-sdk/react';
+import { Divider, Splitter } from 'antd';
+import useToggleAgent from './hooks/useToggleAgent';
+import Chat from './components/modal/chat';
 
-import { PromptInput, PromptInputBody, PromptInputTextarea } from '@/components/ai-elements/prompt-input';
-
-import { Conversation, ConversationContent, ConversationScrollButton } from '@/components/ai-elements/conversation';
-
-import { Message, MessageContent, MessageResponse } from '@/components/ai-elements/message';
-
-import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool';
+import './App.css'
 
 export default function App() {
-  const [input, setInput] = React.useState<string>('');
+  const agentPath = React.useRef('');
+  const chatRef = React.useRef<any>(null);
+  const [forceKey, setForceKey] = React.useState(0);
 
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: 'http://ai.xiaoshengkai.com/chat/owner-agent',
-      // api: 'http://121.41.175.102:4111/chat/owner-agent'
-    }),
+  const forceUpdate = () => {
+    setForceKey(forceKey + 1)
+  }
+
+  const { element } = useToggleAgent({
+    callback: (value: string) => {
+      agentPath.current = value;
+
+      chatRef.current.setInput('');
+      chatRef.current.setMessages([]);
+      chatRef.current.clearError();
+
+      forceUpdate();
+    },
   });
 
-  const handleSubmit = async () => {
-    if (!input.trim()) return;
-
-    sendMessage({ text: input });
-    setInput('');
-  };
-
   return (
-    <div className='max-w-4xl mx-auto p-6 relative size-full h-screen'>
-      <div className='flex flex-col h-full'>
-        <Conversation className='h-full'>
-          <ConversationContent>
-            {messages.map((message) => (
-              <div key={message.id}>
-                {message.parts?.map((part, i) => {
-                  if (part.type === 'text') {
-                    return (
-                      <Message key={`${message.id}-${i}`} from={message.role}>
-                        <MessageContent>
-                          <MessageResponse>{part.text}</MessageResponse>
-                        </MessageContent>
-                      </Message>
-                    );
-                  }
-
-                  if (part.type?.startsWith('tool-')) {
-                    return (
-                      <Tool key={`${message.id}-${i}`}>
-                        <ToolHeader
-                          type={(part as ToolUIPart).type}
-                          state={(part as ToolUIPart).state || 'output-available'}
-                          className='cursor-pointer'
-                        />
-                        <ToolContent>
-                          <ToolInput input={(part as ToolUIPart).input || {}} />
-                          <ToolOutput output={(part as ToolUIPart).output} errorText={(part as ToolUIPart).errorText} />
-                        </ToolContent>
-                      </Tool>
-                    );
-                  }
-
-                  return null;
-                })}
-              </div>
-            ))}
-            <ConversationScrollButton />
-          </ConversationContent>
-        </Conversation>
-        <PromptInput onSubmit={handleSubmit} className='mt-20'>
-          <PromptInputBody>
-            <PromptInputTextarea
-              onChange={(e) => setInput(e.target.value)}
-              className='md:leading-10'
-              value={input}
-              placeholder='请输入'
-              disabled={status !== 'ready'}
-            />
-          </PromptInputBody>
-        </PromptInput>
-      </div>
-    </div>
+    <>
+      <Splitter>
+        <Splitter.Panel collapsible={{ start: true, end: true, showCollapsibleIcon: true }} max={250} min={250}>
+          {element}
+          <Divider></Divider>
+        </Splitter.Panel>
+        <Splitter.Panel collapsible={{ start: true, end: true }}>
+          <Chat ref={chatRef} agentPath={agentPath} key={forceKey}/>
+        </Splitter.Panel>
+      </Splitter>
+    </>
   );
 }
