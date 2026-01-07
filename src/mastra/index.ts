@@ -50,7 +50,7 @@ export const mastra = new Mastra({
           },
         },
       }),
-      registerApiRoute('/all-agent-pathName', {
+      registerApiRoute('/common/all-agent-pathName', {
         method: 'GET',
         handler: async (c) => {
           const obj = { ...agents } as any;

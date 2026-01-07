@@ -35,7 +35,7 @@ const useToggleAgent = ({ callback }: any) => {
   }, [value, options, submit]);
 
   useEffect(() => {
-    fetch(`${HOST}/all-agent-pathName`).then(async (result) => {
+    fetch(`${HOST}/common/all-agent-pathName`).then(async (result) => {
       const json = await result.json();
       const options = json.map((item: { name: unknown; id: unknown }) => ({ label: item.name, value: item.id }));
       const defaultValue = options[0].value;
