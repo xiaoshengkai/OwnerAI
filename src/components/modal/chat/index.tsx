@@ -13,6 +13,7 @@ import { HOST } from '@/constants';
 import { useChat } from '@ai-sdk/react';
 
 const Chat = ({ agentPath }: any, ref: any) => {
+
   const [input, setInput] = React.useState<string>('');
   const { messages, sendMessage, status, setMessages, clearError } = useChat({
     transport: new DefaultChatTransport({
