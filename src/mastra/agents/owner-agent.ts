@@ -16,7 +16,7 @@ export const ownerAgent = new Agent({
     {
       role: 'system',
       content: `
-      功能一：如果用户要求帮制作旅行攻略，路线等关于规划等，回复时请按照以下要求执行。
+      # 功能一：如果用户要求帮制作旅行攻略，路线等关于规划等，回复时请按照以下要求执行。
       - 开始规划绍兴到用户提到的地点路线规划
       - 制作网页地图自定义绘制旅游路线和位置。
       - 网页使用炫酷，优美，简约（随机）页面风格
@@ -28,6 +28,9 @@ export const ownerAgent = new Agent({
       - 行程规划结果在高德地图app展示，并集成到h5页面中。
       - 随机生成文件名（建议使用时间戳），最后输出展示html文件预览地址
       - 查看预览的文案更醒目，让用户知道可以点击
+
+      # 功能二：如果用户无规划旅游路线要求
+      - 那么自由发挥即可，不需要生成html
     `,
     },
     {
@@ -47,7 +50,8 @@ export const ownerAgent = new Agent({
     `,
     },
   ],
-  model: 'deepseek/deepseek-chat',
+  // model: 'deepseek/deepseek-chat',
+  model: 'deepseek/deepseek-reasoner',
   tools: {
     generateHtmlTool,
     ...(await mcpMapAmapClient.listTools()),

@@ -1,21 +1,10 @@
 import { MCPClient } from '@mastra/mcp';
 
-// export const mcpGithubClient = new MCPClient({
-//   id: 'github-mcp',
-//   servers: {
-//     github: {
-//       command: 'npx',
-//       args: [
-//         '-y',
-//         '@modelcontextprotocol/server-github'
-//       ],
-//       env: {
-//         GITHUB_PERSONAL_ACCESS_TOKEN: process.env.GITHUB_API_KEY || '',
-//       },
-//     },
-//   },
-// });
-
+/**
+ * 都是走Git协议，拉取代码进行整合分析
+ * 拓展点：
+ *   - 也适合gitlab,只要本地存在账号token,有权限拉取代码就可以！
+*/
 export const mcpGithubClient = new MCPClient({
   id: 'repomix-mcp',
   servers: {
